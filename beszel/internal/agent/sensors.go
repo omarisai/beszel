@@ -5,7 +5,9 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"os"
 	"path"
+	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
@@ -18,10 +20,18 @@ import (
 type SensorConfig struct {
 	context        context.Context
 	sensors        map[string]struct{}
+	genericSensors map[string]GenericSensorConfig
 	primarySensor  string
 	isBlacklist    bool
 	hasWildcards   bool
 	skipCollection bool
+}
+
+type GenericSensorConfig struct {
+	Name    string
+	Unit    string
+	Maximum float64
+	Minimum float64
 }
 
 func (a *Agent) newSensorConfig() *SensorConfig {
@@ -44,6 +54,7 @@ func (a *Agent) newSensorConfigWithEnv(primarySensor, sysSensors, sensorsEnvVal 
 		primarySensor:  primarySensor,
 		skipCollection: skipCollection,
 		sensors:        make(map[string]struct{}),
+		genericSensors: make(map[string]GenericSensorConfig),
 	}
 
 	// Set sensors context (allows overriding sys location for sensors)
@@ -63,14 +74,69 @@ func (a *Agent) newSensorConfigWithEnv(primarySensor, sysSensors, sensorsEnvVal 
 	for sensor := range strings.SplitSeq(sensorsEnvVal, ",") {
 		sensor = strings.TrimSpace(sensor)
 		if sensor != "" {
-			config.sensors[sensor] = struct{}{}
-			if strings.Contains(sensor, "*") {
-				config.hasWildcards = true
+			// Check if it's new generic sensor format
+			if strings.HasPrefix(sensor, "(") && strings.HasSuffix(sensor, ")") {
+				if err := config.parseGenericSensor(sensor); err != nil {
+					slog.Warn("Invalid generic sensor format", "sensor", sensor, "err", err)
+					continue
+				}
+			} else {
+				// Existing temperature sensor logic
+				config.sensors[sensor] = struct{}{}
+				if strings.Contains(sensor, "*") {
+					config.hasWildcards = true
+				}
 			}
 		}
 	}
 
 	return config
+}
+
+// parseGenericSensor parses a generic sensor configuration in the format "(name,unit,maximum,minimum)"
+func (config *SensorConfig) parseGenericSensor(sensor string) error {
+	// Remove parentheses
+	content := sensor[1 : len(sensor)-1]
+	parts := strings.Split(content, ",")
+	if len(parts) != 4 {
+		return fmt.Errorf("expected 4 parts (name,unit,maximum,minimum), got %d", len(parts))
+	}
+
+	name := strings.TrimSpace(parts[0])
+	unit := strings.TrimSpace(parts[1])
+	maximumStr := strings.TrimSpace(parts[2])
+	minimumStr := strings.TrimSpace(parts[3])
+
+	if name == "" {
+		return fmt.Errorf("sensor name cannot be empty")
+	}
+	if unit == "" {
+		return fmt.Errorf("sensor unit cannot be empty")
+	}
+
+	maximum, err := strconv.ParseFloat(maximumStr, 64)
+	if err != nil {
+		return fmt.Errorf("invalid maximum value '%s': %w", maximumStr, err)
+	}
+
+	minimum, err := strconv.ParseFloat(minimumStr, 64)
+	if err != nil {
+		return fmt.Errorf("invalid minimum value '%s': %w", minimumStr, err)
+	}
+
+	if minimum >= maximum {
+		return fmt.Errorf("minimum value (%f) must be less than maximum value (%f)", minimum, maximum)
+	}
+
+	config.genericSensors[name] = GenericSensorConfig{
+		Name:    name,
+		Unit:    unit,
+		Maximum: maximum,
+		Minimum: minimum,
+	}
+
+	slog.Info("Configured generic sensor", "name", name, "unit", unit, "min", minimum, "max", maximum)
+	return nil
 }
 
 // updateTemperatures updates the agent with the latest sensor temperatures
@@ -138,6 +204,105 @@ func (a *Agent) updateTemperatures(systemStats *system.Stats) {
 	}
 }
 
+// updateGenericSensors updates the agent with the latest generic sensor data
+func (a *Agent) updateGenericSensors(systemStats *system.Stats) {
+	// Skip if no generic sensors are configured
+	if len(a.sensorConfig.genericSensors) == 0 {
+		return
+	}
+
+	// Initialize the map if needed
+	if systemStats.GenericSensors == nil {
+		systemStats.GenericSensors = make(map[string]system.SensorData)
+	}
+
+	// Collect data for each configured generic sensor
+	for name, config := range a.sensorConfig.genericSensors {
+		value, err := a.collectGenericSensorValue(name, config)
+		if err != nil {
+			slog.Warn("Failed to collect generic sensor data", "sensor", name, "err", err)
+			continue
+		}
+
+		// Validate the value is within the configured range
+		if value < config.Minimum || value > config.Maximum {
+			slog.Warn("Generic sensor value out of range", "sensor", name, "value", value, "min", config.Minimum, "max", config.Maximum)
+			continue
+		}
+
+		systemStats.GenericSensors[name] = system.SensorData{
+			Value: twoDecimals(value),
+			Unit:  config.Unit,
+			Min:   config.Minimum,
+			Max:   config.Maximum,
+		}
+	}
+}
+
+// collectGenericSensorValue collects the current value for a generic sensor
+// It reads the value from the corresponding file in /generic-sensors/
+func (a *Agent) collectGenericSensorValue(sensorName string, config GenericSensorConfig) (float64, error) {
+	// Look for sensor file in /generic-sensors/
+	sensorPath := filepath.Join("/generic-sensors", sensorName)
+	
+	// Check if the sensor file exists
+	if _, err := os.Stat(sensorPath); os.IsNotExist(err) {
+		return 0, fmt.Errorf("sensor file not found at %s - create a file or symlink with the sensor value", sensorPath)
+	}
+	
+	// Read the sensor value from the file
+	value, err := ReadSensorFromFile(sensorPath)
+	if err != nil {
+		return 0, fmt.Errorf("failed to read sensor '%s' from %s: %w", sensorName, sensorPath, err)
+	}
+	
+	return value, nil
+}
+
+// Helper functions for implementing custom sensor collection
+
+// ReadSensorFromFile reads a numeric value from a file path (useful for Linux sysfs sensors)
+func ReadSensorFromFile(filePath string) (float64, error) {
+	// Read the file content
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return 0, fmt.Errorf("failed to read sensor file %s: %w", filePath, err)
+	}
+
+	// Parse the numeric value
+	valueStr := strings.TrimSpace(string(data))
+	value, err := strconv.ParseFloat(valueStr, 64)
+	if err != nil {
+		return 0, fmt.Errorf("failed to parse sensor value '%s' from %s: %w", valueStr, filePath, err)
+	}
+
+	return value, nil
+}
+
+// GetGenericSensorNames returns the names of all configured generic sensors
+func (a *Agent) GetGenericSensorNames() []string {
+	names := make([]string, 0, len(a.sensorConfig.genericSensors))
+	for name := range a.sensorConfig.genericSensors {
+		names = append(names, name)
+	}
+	return names
+}
+
+// NewSensorConfigWithEnv creates a SensorConfig with the provided environment variables (exported for testing)
+func (a *Agent) NewSensorConfigWithEnv(primarySensor, sysSensors, sensorsEnvVal string, skipCollection bool) *SensorConfig {
+	return a.newSensorConfigWithEnv(primarySensor, sysSensors, sensorsEnvVal, skipCollection)
+}
+
+// GetTemperatureSensors returns the configured temperature sensors
+func (config *SensorConfig) GetTemperatureSensors() map[string]struct{} {
+	return config.sensors
+}
+
+// GetGenericSensors returns the configured generic sensors
+func (config *SensorConfig) GetGenericSensors() map[string]GenericSensorConfig {
+	return config.genericSensors
+}
+
 // getTempsWithPanicRecovery wraps sensors.TemperaturesWithContext to recover from panics (gopsutil/issues/1832)
 func (a *Agent) getTempsWithPanicRecovery(getTemps getTempsFn) (temps []sensors.TemperatureStat, err error) {
 	defer func() {
@@ -152,6 +317,11 @@ func (a *Agent) getTempsWithPanicRecovery(getTemps getTempsFn) (temps []sensors.
 
 // isValidSensor checks if a sensor is valid based on the sensor name and the sensor config
 func isValidSensor(sensorName string, config *SensorConfig) bool {
+	// Check if it's a configured generic sensor
+	if _, exists := config.genericSensors[sensorName]; exists {
+		return true
+	}
+
 	// if no sensors configured, everything is valid
 	if len(config.sensors) == 0 {
 		return true

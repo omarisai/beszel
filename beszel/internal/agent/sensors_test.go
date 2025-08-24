@@ -24,11 +24,22 @@ func TestIsValidSensor(t *testing.T) {
 		expectedValid bool
 	}{
 		{
+			name:       "Generic sensor in config",
+			sensorName: "pressure_sensor",
+			config: &SensorConfig{
+				sensors:        map[string]struct{}{},
+				genericSensors: map[string]GenericSensorConfig{"pressure_sensor": {Name: "pressure_sensor", Unit: "Pa", Maximum: 1000, Minimum: 0}},
+				isBlacklist:    false,
+			},
+			expectedValid: true,
+		},
+		{
 			name:       "Whitelist - sensor in list",
 			sensorName: "cpu_temp",
 			config: &SensorConfig{
-				sensors:     map[string]struct{}{"cpu_temp": {}},
-				isBlacklist: false,
+				sensors:        map[string]struct{}{"cpu_temp": {}},
+				genericSensors: map[string]GenericSensorConfig{},
+				isBlacklist:    false,
 			},
 			expectedValid: true,
 		},
@@ -36,8 +47,9 @@ func TestIsValidSensor(t *testing.T) {
 			name:       "Whitelist - sensor not in list",
 			sensorName: "gpu_temp",
 			config: &SensorConfig{
-				sensors:     map[string]struct{}{"cpu_temp": {}},
-				isBlacklist: false,
+				sensors:        map[string]struct{}{"cpu_temp": {}},
+				genericSensors: map[string]GenericSensorConfig{},
+				isBlacklist:    false,
 			},
 			expectedValid: false,
 		},
@@ -45,8 +57,9 @@ func TestIsValidSensor(t *testing.T) {
 			name:       "Blacklist - sensor in list",
 			sensorName: "cpu_temp",
 			config: &SensorConfig{
-				sensors:     map[string]struct{}{"cpu_temp": {}},
-				isBlacklist: true,
+				sensors:        map[string]struct{}{"cpu_temp": {}},
+				genericSensors: map[string]GenericSensorConfig{},
+				isBlacklist:    true,
 			},
 			expectedValid: false,
 		},
@@ -550,4 +563,191 @@ func TestGetTempsWithPanicRecovery(t *testing.T) {
 			}
 		})
 	}
+}
+
+// Test parseGenericSensor functionality
+func TestParseGenericSensor(t *testing.T) {
+	tests := []struct {
+		name        string
+		input       string
+		expectError bool
+		expected    GenericSensorConfig
+	}{
+		{
+			name:        "Valid generic sensor",
+			input:       "(pressure,Pa,1000,0)",
+			expectError: false,
+			expected: GenericSensorConfig{
+				Name:    "pressure",
+				Unit:    "Pa",
+				Maximum: 1000,
+				Minimum: 0,
+			},
+		},
+		{
+			name:        "Valid with decimals",
+			input:       "(voltage,V,12.5,0.5)",
+			expectError: false,
+			expected: GenericSensorConfig{
+				Name:    "voltage",
+				Unit:    "V",
+				Maximum: 12.5,
+				Minimum: 0.5,
+			},
+		},
+		{
+			name:        "Valid with spaces",
+			input:       "( rpm , RPM , 3000 , 500 )",
+			expectError: false,
+			expected: GenericSensorConfig{
+				Name:    "rpm",
+				Unit:    "RPM",
+				Maximum: 3000,
+				Minimum: 500,
+			},
+		},
+		{
+			name:        "Missing parts",
+			input:       "(pressure,Pa,1000)",
+			expectError: true,
+		},
+		{
+			name:        "Too many parts",
+			input:       "(pressure,Pa,1000,0,extra)",
+			expectError: true,
+		},
+		{
+			name:        "Empty name",
+			input:       "(,Pa,1000,0)",
+			expectError: true,
+		},
+		{
+			name:        "Empty unit",
+			input:       "(pressure,,1000,0)",
+			expectError: true,
+		},
+		{
+			name:        "Invalid maximum",
+			input:       "(pressure,Pa,invalid,0)",
+			expectError: true,
+		},
+		{
+			name:        "Invalid minimum",
+			input:       "(pressure,Pa,1000,invalid)",
+			expectError: true,
+		},
+		{
+			name:        "Minimum >= Maximum",
+			input:       "(pressure,Pa,100,200)",
+			expectError: true,
+		},
+		{
+			name:        "Minimum = Maximum",
+			input:       "(pressure,Pa,100,100)",
+			expectError: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			config := &SensorConfig{
+				genericSensors: make(map[string]GenericSensorConfig),
+			}
+
+			err := config.parseGenericSensor(tt.input)
+
+			if tt.expectError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Contains(t, config.genericSensors, tt.expected.Name)
+				assert.Equal(t, tt.expected, config.genericSensors[tt.expected.Name])
+			}
+		})
+	}
+}
+
+// Test newSensorConfigWithEnv with generic sensors
+func TestNewSensorConfigWithEnvGeneric(t *testing.T) {
+	tests := []struct {
+		name                    string
+		sensorsEnvVal           string
+		expectedGenericSensors  int
+		expectedTemperatureSens int
+	}{
+		{
+			name:                    "Mixed sensors",
+			sensorsEnvVal:           "cpu_temp,(pressure,Pa,1000,0),gpu_temp,(voltage,V,12,0)",
+			expectedGenericSensors:  2,
+			expectedTemperatureSens: 2,
+		},
+		{
+			name:                    "Only generic sensors",
+			sensorsEnvVal:           "(pressure,Pa,1000,0),(voltage,V,12,0)",
+			expectedGenericSensors:  2,
+			expectedTemperatureSens: 0,
+		},
+		{
+			name:                    "Only temperature sensors",
+			sensorsEnvVal:           "cpu_temp,gpu_temp",
+			expectedGenericSensors:  0,
+			expectedTemperatureSens: 2,
+		},
+		{
+			name:                    "Invalid generic sensor ignored",
+			sensorsEnvVal:           "cpu_temp,(invalid),gpu_temp",
+			expectedGenericSensors:  0,
+			expectedTemperatureSens: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			agent := &Agent{}
+			config := agent.newSensorConfigWithEnv("", "", tt.sensorsEnvVal, false)
+
+			assert.Equal(t, tt.expectedGenericSensors, len(config.genericSensors))
+			assert.Equal(t, tt.expectedTemperatureSens, len(config.sensors))
+		})
+	}
+}
+
+// Test updateGenericSensors
+func TestUpdateGenericSensors(t *testing.T) {
+	agent := &Agent{
+		sensorConfig: &SensorConfig{
+			genericSensors: map[string]GenericSensorConfig{
+				"test_sensor": {
+					Name:    "test_sensor",
+					Unit:    "test_unit",
+					Maximum: 100,
+					Minimum: 0,
+				},
+			},
+		},
+	}
+
+	// Mock the collectGenericSensorValue method for testing
+	originalCollectGenericSensorValue := agent.collectGenericSensorValue
+	agent.collectGenericSensorValue = func(sensorName string, config GenericSensorConfig) (float64, error) {
+		if sensorName == "test_sensor" {
+			return 50.0, nil
+		}
+		return 0, fmt.Errorf("sensor not found")
+	}
+	defer func() {
+		agent.collectGenericSensorValue = originalCollectGenericSensorValue
+	}()
+
+	systemStats := &system.Stats{}
+	agent.updateGenericSensors(systemStats)
+
+	assert.NotNil(t, systemStats.GenericSensors)
+	assert.Contains(t, systemStats.GenericSensors, "test_sensor")
+	
+	sensor := systemStats.GenericSensors["test_sensor"]
+	assert.Equal(t, 50.0, sensor.Value)
+	assert.Equal(t, "test_unit", sensor.Unit)
+	assert.Equal(t, 100.0, sensor.Max)
+	assert.Equal(t, 0.0, sensor.Min)
 }

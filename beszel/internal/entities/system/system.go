@@ -28,9 +28,10 @@ type Stats struct {
 	NetworkRecv    float64             `json:"nr" cbor:"17,keyasint"`
 	MaxNetworkSent float64             `json:"nsm,omitempty" cbor:"18,keyasint,omitempty"`
 	MaxNetworkRecv float64             `json:"nrm,omitempty" cbor:"19,keyasint,omitempty"`
-	Temperatures   map[string]float64  `json:"t,omitempty" cbor:"20,keyasint,omitempty"`
-	ExtraFs        map[string]*FsStats `json:"efs,omitempty" cbor:"21,keyasint,omitempty"`
-	GPUData        map[string]GPUData  `json:"g,omitempty" cbor:"22,keyasint,omitempty"`
+	Temperatures   map[string]float64      `json:"t,omitempty" cbor:"20,keyasint,omitempty"`
+	GenericSensors map[string]SensorData   `json:"gs,omitempty" cbor:"29,keyasint,omitempty"`
+	ExtraFs        map[string]*FsStats     `json:"efs,omitempty" cbor:"21,keyasint,omitempty"`
+	GPUData        map[string]GPUData      `json:"g,omitempty" cbor:"22,keyasint,omitempty"`
 	LoadAvg1       float64             `json:"l1,omitempty" cbor:"23,keyasint,omitempty"`
 	LoadAvg5       float64             `json:"l5,omitempty" cbor:"24,keyasint,omitempty"`
 	LoadAvg15      float64             `json:"l15,omitempty" cbor:"25,keyasint,omitempty"`
@@ -48,6 +49,13 @@ type GPUData struct {
 	Usage       float64 `json:"u" cbor:"3,keyasint"`
 	Power       float64 `json:"p,omitempty" cbor:"4,keyasint,omitempty"`
 	Count       float64 `json:"-"`
+}
+
+type SensorData struct {
+	Value   float64 `json:"v" cbor:"0,keyasint"`
+	Unit    string  `json:"u" cbor:"1,keyasint"`
+	Min     float64 `json:"min,omitempty" cbor:"2,keyasint,omitempty"`
+	Max     float64 `json:"max,omitempty" cbor:"3,keyasint,omitempty"`
 }
 
 type FsStats struct {

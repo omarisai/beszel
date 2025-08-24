@@ -221,6 +221,9 @@ func (a *Agent) getSystemStats() system.Stats {
 	// TODO: maybe refactor to methods on systemStats
 	a.updateTemperatures(&systemStats)
 
+	// generic sensors
+	a.updateGenericSensors(&systemStats)
+
 	// GPU data
 	if a.gpuManager != nil {
 		// reset high gpu percent

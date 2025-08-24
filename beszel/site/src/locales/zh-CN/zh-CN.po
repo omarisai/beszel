@@ -69,8 +69,8 @@ msgid "5 min"
 msgstr "5分钟"
 
 #. Table column
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/settings/tokens-fingerprints.tsx
+#: src/components/systems-table/systems-table-columns.tsx
 msgid "Actions"
 msgstr "操作"
 
@@ -113,18 +113,18 @@ msgid "Agent"
 msgstr "客户端"
 
 #: src/components/command-palette.tsx
-#: src/components/routes/settings/layout.tsx
 #: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/routes/settings/layout.tsx
 msgid "Alert History"
 msgstr "警报历史"
 
 #: src/components/alerts/alert-button.tsx
-#: src/components/alerts/alert-button.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "Alerts"
 msgstr "警报"
 
+#: src/components/alerts/alerts-sheet.tsx
 #: src/components/systems-table/systems-table.tsx
-#: src/components/alerts/alert-button.tsx
 msgid "All Systems"
 msgstr "所有客户端"
 
@@ -148,8 +148,8 @@ msgstr "平均"
 msgid "Average CPU utilization of containers"
 msgstr "容器的平均 CPU 使用率"
 
-#. placeholder {0}: data.alert.unit
-#: src/components/alerts/alerts-system.tsx
+#. placeholder {0}: alertData.unit
+#: src/components/alerts/alerts-sheet.tsx
 msgid "Average exceeds <0>{value}{0}</0>"
 msgstr "平均值超过<0>{value}{0}</0>"
 
@@ -166,13 +166,13 @@ msgstr "系统范围内的平均 CPU 使用率"
 msgid "Average utilization of {0}"
 msgstr "{0} 平均利用率"
 
-#: src/components/navbar.tsx
 #: src/components/command-palette.tsx
+#: src/components/navbar.tsx
 msgid "Backups"
 msgstr "备份"
 
-#: src/lib/utils.ts
 #: src/components/routes/system.tsx
+#: src/lib/utils.ts
 msgid "Bandwidth"
 msgstr "带宽"
 
@@ -202,8 +202,8 @@ msgstr "字节 (KB/s, MB/s, GB/s)"
 msgid "Cache / Buffers"
 msgstr "缓存/缓冲区"
 
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/systems-table/systems-table-columns.tsx
 msgid "Cancel"
 msgstr "取消"
 
@@ -261,8 +261,8 @@ msgstr "确认密码"
 msgid "Connection is down"
 msgstr "连接已断开"
 
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/systems-table/systems-table-columns.tsx
 msgid "Continue"
 msgstr "继续"
 
@@ -320,9 +320,9 @@ msgstr "复制YAML"
 msgid "CPU"
 msgstr "CPU"
 
+#: src/components/routes/system.tsx
+#: src/components/routes/system.tsx
 #: src/lib/utils.ts
-#: src/components/routes/system.tsx
-#: src/components/routes/system.tsx
 msgid "CPU Usage"
 msgstr "CPU使用率"
 
@@ -353,8 +353,8 @@ msgstr "仪表板"
 msgid "Default time period"
 msgstr "默认时间段"
 
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/systems-table/systems-table-columns.tsx
 msgid "Delete"
 msgstr "删除"
 
@@ -374,9 +374,9 @@ msgstr "磁盘I/O"
 msgid "Disk unit"
 msgstr "磁盘单位"
 
-#: src/lib/utils.ts
-#: src/components/routes/system.tsx
 #: src/components/charts/disk-chart.tsx
+#: src/components/routes/system.tsx
+#: src/lib/utils.ts
 msgid "Disk Usage"
 msgstr "磁盘使用"
 
@@ -401,10 +401,10 @@ msgid "Documentation"
 msgstr "文档"
 
 #. Context: System is down
-#: src/lib/utils.ts
 #: src/components/alerts-history-columns.tsx
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/system.tsx
+#: src/components/systems-table/systems-table-columns.tsx
+#: src/lib/utils.ts
 msgid "Down"
 msgstr "离线"
 
@@ -417,8 +417,8 @@ msgstr "持续时间"
 msgid "Edit"
 msgstr "编辑"
 
-#: src/components/login/forgot-pass-form.tsx
 #: src/components/login/auth-form.tsx
+#: src/components/login/forgot-pass-form.tsx
 msgid "Email"
 msgstr "电子邮件"
 
@@ -434,11 +434,11 @@ msgstr "输入电子邮件地址以重置密码"
 msgid "Enter email address..."
 msgstr "输入电子邮件地址..."
 
-#: src/components/routes/settings/tokens-fingerprints.tsx
-#: src/components/routes/settings/notifications.tsx
-#: src/components/routes/settings/config-yaml.tsx
-#: src/components/routes/settings/alerts-history-data-table.tsx
 #: src/components/login/auth-form.tsx
+#: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/routes/settings/config-yaml.tsx
+#: src/components/routes/settings/notifications.tsx
+#: src/components/routes/settings/tokens-fingerprints.tsx
 msgid "Error"
 msgstr "错误"
 
@@ -473,8 +473,8 @@ msgstr "华氏度 (°F)"
 msgid "Failed to authenticate"
 msgstr "认证失败"
 
-#: src/components/routes/settings/notifications.tsx
 #: src/components/routes/settings/layout.tsx
+#: src/components/routes/settings/notifications.tsx
 msgid "Failed to save settings"
 msgstr "保存设置失败"
 
@@ -482,13 +482,13 @@ msgstr "保存设置失败"
 msgid "Failed to send test notification"
 msgstr "发送测试通知失败"
 
-#: src/components/alerts/alerts-system.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "Failed to update alert"
 msgstr "更新警报失败"
 
-#: src/components/systems-table/systems-table.tsx
-#: src/components/routes/system.tsx
 #: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/routes/system.tsx
+#: src/components/systems-table/systems-table.tsx
 msgid "Filter..."
 msgstr "过滤..."
 
@@ -496,7 +496,7 @@ msgstr "过滤..."
 msgid "Fingerprint"
 msgstr "指纹"
 
-#: src/components/alerts/alerts-system.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "For <0>{min}</0> {min, plural, one {minute} other {minutes}}"
 msgstr "持续<0>{min}</0> {min, plural, one {分钟} other {分钟}}"
 
@@ -505,8 +505,8 @@ msgid "Forgot password?"
 msgstr "忘记密码？"
 
 #. Context: General settings
-#: src/components/routes/settings/layout.tsx
 #: src/components/routes/settings/general.tsx
+#: src/components/routes/settings/layout.tsx
 msgid "General"
 msgstr "常规"
 
@@ -583,13 +583,13 @@ msgstr "登出"
 msgid "Login"
 msgstr "登录"
 
-#: src/components/login/forgot-pass-form.tsx
 #: src/components/login/auth-form.tsx
+#: src/components/login/forgot-pass-form.tsx
 msgid "Login attempt failed"
 msgstr "登录尝试失败"
 
-#: src/components/navbar.tsx
 #: src/components/command-palette.tsx
+#: src/components/navbar.tsx
 msgid "Logs"
 msgstr "日志"
 
@@ -614,8 +614,8 @@ msgstr "1分钟内最大值"
 msgid "Memory"
 msgstr "内存"
 
-#: src/lib/utils.ts
 #: src/components/routes/system.tsx
+#: src/lib/utils.ts
 msgid "Memory Usage"
 msgstr "内存使用"
 
@@ -623,8 +623,8 @@ msgstr "内存使用"
 msgid "Memory usage of docker containers"
 msgstr "Docker 容器的内存使用"
 
-#: src/components/alerts-history-columns.tsx
 #: src/components/add-system.tsx
+#: src/components/alerts-history-columns.tsx
 msgid "Name"
 msgstr "名称"
 
@@ -659,8 +659,8 @@ msgid "No systems found."
 msgstr "未找到系统。"
 
 #: src/components/command-palette.tsx
-#: src/components/routes/settings/notifications.tsx
 #: src/components/routes/settings/layout.tsx
+#: src/components/routes/settings/notifications.tsx
 msgid "Notifications"
 msgstr "通知"
 
@@ -672,9 +672,9 @@ msgstr "支持 OAuth 2 / OIDC"
 msgid "On each restart, systems in the database will be updated to match the systems defined in the file."
 msgstr "每次重启时，数据库中的系统将更新以匹配文件中定义的系统。"
 
+#: src/components/routes/settings/tokens-fingerprints.tsx
+#: src/components/routes/settings/tokens-fingerprints.tsx
 #: src/components/systems-table/systems-table-columns.tsx
-#: src/components/routes/settings/tokens-fingerprints.tsx
-#: src/components/routes/settings/tokens-fingerprints.tsx
 msgid "Open menu"
 msgstr "打开菜单"
 
@@ -682,7 +682,7 @@ msgstr "打开菜单"
 msgid "Or continue with"
 msgstr "或使用以下方式登录"
 
-#: src/components/alerts/alert-button.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "Overwrite existing alerts"
 msgstr "覆盖现有警报"
 
@@ -729,12 +729,12 @@ msgstr "已暂停"
 msgid "Please <0>configure an SMTP server</0> to ensure alerts are delivered."
 msgstr "请<0>配置SMTP服务器</0>以确保警报被传递。"
 
-#: src/components/alerts/alerts-system.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "Please check logs for more details."
 msgstr "请检查日志以获取更多详细信息。"
 
-#: src/components/login/forgot-pass-form.tsx
 #: src/components/login/auth-form.tsx
+#: src/components/login/forgot-pass-form.tsx
 msgid "Please check your credentials and try again"
 msgstr "请检查您的凭据并重试"
 
@@ -812,8 +812,8 @@ msgstr "每页行数"
 msgid "Save address using enter key or comma. Leave blank to disable email notifications."
 msgstr "使用回车键或逗号保存地址。留空以禁用电子邮件通知。"
 
-#: src/components/routes/settings/notifications.tsx
 #: src/components/routes/settings/general.tsx
+#: src/components/routes/settings/notifications.tsx
 msgid "Save Settings"
 msgstr "保存设置"
 
@@ -829,9 +829,14 @@ msgstr "搜索"
 msgid "Search for systems or settings..."
 msgstr "搜索系统或设置..."
 
-#: src/components/alerts/alert-button.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "See <0>notification settings</0> to configure how you receive alerts."
 msgstr "查看<0>通知设置</0>以配置您接收警报的方式。"
+
+#. Generic sensors label in systems table
+#: src/components/systems-table/systems-table-columns.tsx
+msgid "Sensors"
+msgstr ""
 
 #: src/components/routes/system.tsx
 msgid "Sent"
@@ -886,11 +891,11 @@ msgid "Swap Usage"
 msgstr "SWAP 使用"
 
 #. System theme
-#: src/lib/utils.ts
-#: src/components/mode-toggle.tsx
 #: src/components/alerts-history-columns.tsx
-#: src/components/systems-table/systems-table-columns.tsx
+#: src/components/mode-toggle.tsx
 #: src/components/routes/settings/tokens-fingerprints.tsx
+#: src/components/systems-table/systems-table-columns.tsx
+#: src/lib/utils.ts
 msgid "System"
 msgstr "系统"
 
@@ -915,8 +920,8 @@ msgstr "表格"
 msgid "Temp"
 msgstr "温度"
 
-#: src/lib/utils.ts
 #: src/components/routes/system.tsx
+#: src/lib/utils.ts
 msgid "Temperature"
 msgstr "温度"
 
@@ -975,8 +980,8 @@ msgid "Token"
 msgstr "令牌"
 
 #: src/components/command-palette.tsx
-#: src/components/routes/settings/tokens-fingerprints.tsx
 #: src/components/routes/settings/layout.tsx
+#: src/components/routes/settings/tokens-fingerprints.tsx
 msgid "Tokens & Fingerprints"
 msgstr "令牌和指纹"
 
@@ -1034,8 +1039,8 @@ msgid "Universal token"
 msgstr "通用令牌"
 
 #. Context: System is up
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/system.tsx
+#: src/components/systems-table/systems-table-columns.tsx
 msgid "Up"
 msgstr "在线"
 
@@ -1058,13 +1063,13 @@ msgstr "使用"
 msgid "Usage of root partition"
 msgstr "根分区的使用"
 
-#: src/components/charts/swap-chart.tsx
 #: src/components/charts/mem-chart.tsx
+#: src/components/charts/swap-chart.tsx
 msgid "Used"
 msgstr "已用"
 
-#: src/components/navbar.tsx
 #: src/components/command-palette.tsx
+#: src/components/navbar.tsx
 msgid "Users"
 msgstr "用户"
 

@@ -69,8 +69,8 @@ msgid "5 min"
 msgstr ""
 
 #. Table column
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/settings/tokens-fingerprints.tsx
+#: src/components/systems-table/systems-table-columns.tsx
 msgid "Actions"
 msgstr "Azioni"
 
@@ -113,18 +113,18 @@ msgid "Agent"
 msgstr "Agente"
 
 #: src/components/command-palette.tsx
-#: src/components/routes/settings/layout.tsx
 #: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/routes/settings/layout.tsx
 msgid "Alert History"
 msgstr ""
 
 #: src/components/alerts/alert-button.tsx
-#: src/components/alerts/alert-button.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "Alerts"
 msgstr "Avvisi"
 
+#: src/components/alerts/alerts-sheet.tsx
 #: src/components/systems-table/systems-table.tsx
-#: src/components/alerts/alert-button.tsx
 msgid "All Systems"
 msgstr "Tutti i Sistemi"
 
@@ -148,8 +148,8 @@ msgstr "Media"
 msgid "Average CPU utilization of containers"
 msgstr "Utilizzo medio della CPU dei container"
 
-#. placeholder {0}: data.alert.unit
-#: src/components/alerts/alerts-system.tsx
+#. placeholder {0}: alertData.unit
+#: src/components/alerts/alerts-sheet.tsx
 msgid "Average exceeds <0>{value}{0}</0>"
 msgstr "La media supera <0>{value}{0}</0>"
 
@@ -166,13 +166,13 @@ msgstr "Utilizzo medio della CPU a livello di sistema"
 msgid "Average utilization of {0}"
 msgstr "Utilizzo medio di {0}"
 
-#: src/components/navbar.tsx
 #: src/components/command-palette.tsx
+#: src/components/navbar.tsx
 msgid "Backups"
 msgstr "Backup"
 
-#: src/lib/utils.ts
 #: src/components/routes/system.tsx
+#: src/lib/utils.ts
 msgid "Bandwidth"
 msgstr "Larghezza di banda"
 
@@ -202,8 +202,8 @@ msgstr ""
 msgid "Cache / Buffers"
 msgstr "Cache / Buffer"
 
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/systems-table/systems-table-columns.tsx
 msgid "Cancel"
 msgstr "Annulla"
 
@@ -261,8 +261,8 @@ msgstr "Conferma password"
 msgid "Connection is down"
 msgstr ""
 
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/systems-table/systems-table-columns.tsx
 msgid "Continue"
 msgstr "Continua"
 
@@ -320,9 +320,9 @@ msgstr "Copia YAML"
 msgid "CPU"
 msgstr "CPU"
 
+#: src/components/routes/system.tsx
+#: src/components/routes/system.tsx
 #: src/lib/utils.ts
-#: src/components/routes/system.tsx
-#: src/components/routes/system.tsx
 msgid "CPU Usage"
 msgstr "Utilizzo CPU"
 
@@ -353,8 +353,8 @@ msgstr "Cruscotto"
 msgid "Default time period"
 msgstr "Periodo di tempo predefinito"
 
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/systems-table/systems-table-columns.tsx
 msgid "Delete"
 msgstr "Elimina"
 
@@ -374,9 +374,9 @@ msgstr "I/O Disco"
 msgid "Disk unit"
 msgstr ""
 
-#: src/lib/utils.ts
-#: src/components/routes/system.tsx
 #: src/components/charts/disk-chart.tsx
+#: src/components/routes/system.tsx
+#: src/lib/utils.ts
 msgid "Disk Usage"
 msgstr "Utilizzo Disco"
 
@@ -401,10 +401,10 @@ msgid "Documentation"
 msgstr "Documentazione"
 
 #. Context: System is down
-#: src/lib/utils.ts
 #: src/components/alerts-history-columns.tsx
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/system.tsx
+#: src/components/systems-table/systems-table-columns.tsx
+#: src/lib/utils.ts
 msgid "Down"
 msgstr "Offline"
 
@@ -417,8 +417,8 @@ msgstr ""
 msgid "Edit"
 msgstr "Modifica"
 
-#: src/components/login/forgot-pass-form.tsx
 #: src/components/login/auth-form.tsx
+#: src/components/login/forgot-pass-form.tsx
 msgid "Email"
 msgstr "Email"
 
@@ -434,11 +434,11 @@ msgstr "Inserisci l'indirizzo email per reimpostare la password"
 msgid "Enter email address..."
 msgstr "Inserisci l'indirizzo email..."
 
-#: src/components/routes/settings/tokens-fingerprints.tsx
-#: src/components/routes/settings/notifications.tsx
-#: src/components/routes/settings/config-yaml.tsx
-#: src/components/routes/settings/alerts-history-data-table.tsx
 #: src/components/login/auth-form.tsx
+#: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/routes/settings/config-yaml.tsx
+#: src/components/routes/settings/notifications.tsx
+#: src/components/routes/settings/tokens-fingerprints.tsx
 msgid "Error"
 msgstr "Errore"
 
@@ -473,8 +473,8 @@ msgstr ""
 msgid "Failed to authenticate"
 msgstr "Autenticazione fallita"
 
-#: src/components/routes/settings/notifications.tsx
 #: src/components/routes/settings/layout.tsx
+#: src/components/routes/settings/notifications.tsx
 msgid "Failed to save settings"
 msgstr "Salvataggio delle impostazioni fallito"
 
@@ -482,13 +482,13 @@ msgstr "Salvataggio delle impostazioni fallito"
 msgid "Failed to send test notification"
 msgstr "Invio della notifica di test fallito"
 
-#: src/components/alerts/alerts-system.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "Failed to update alert"
 msgstr "Aggiornamento dell'avviso fallito"
 
-#: src/components/systems-table/systems-table.tsx
-#: src/components/routes/system.tsx
 #: src/components/routes/settings/alerts-history-data-table.tsx
+#: src/components/routes/system.tsx
+#: src/components/systems-table/systems-table.tsx
 msgid "Filter..."
 msgstr "Filtra..."
 
@@ -496,7 +496,7 @@ msgstr "Filtra..."
 msgid "Fingerprint"
 msgstr ""
 
-#: src/components/alerts/alerts-system.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "For <0>{min}</0> {min, plural, one {minute} other {minutes}}"
 msgstr "Per <0>{min}</0> {min, plural, one {minuto} other {minuti}}"
 
@@ -505,8 +505,8 @@ msgid "Forgot password?"
 msgstr "Password dimenticata?"
 
 #. Context: General settings
-#: src/components/routes/settings/layout.tsx
 #: src/components/routes/settings/general.tsx
+#: src/components/routes/settings/layout.tsx
 msgid "General"
 msgstr "Generale"
 
@@ -583,13 +583,13 @@ msgstr "Disconnetti"
 msgid "Login"
 msgstr "Accedi"
 
-#: src/components/login/forgot-pass-form.tsx
 #: src/components/login/auth-form.tsx
+#: src/components/login/forgot-pass-form.tsx
 msgid "Login attempt failed"
 msgstr "Tentativo di accesso fallito"
 
-#: src/components/navbar.tsx
 #: src/components/command-palette.tsx
+#: src/components/navbar.tsx
 msgid "Logs"
 msgstr "Log"
 
@@ -614,8 +614,8 @@ msgstr "Max 1 min"
 msgid "Memory"
 msgstr "Memoria"
 
-#: src/lib/utils.ts
 #: src/components/routes/system.tsx
+#: src/lib/utils.ts
 msgid "Memory Usage"
 msgstr "Utilizzo Memoria"
 
@@ -623,8 +623,8 @@ msgstr "Utilizzo Memoria"
 msgid "Memory usage of docker containers"
 msgstr "Utilizzo della memoria dei container Docker"
 
-#: src/components/alerts-history-columns.tsx
 #: src/components/add-system.tsx
+#: src/components/alerts-history-columns.tsx
 msgid "Name"
 msgstr "Nome"
 
@@ -659,8 +659,8 @@ msgid "No systems found."
 msgstr "Nessun sistema trovato."
 
 #: src/components/command-palette.tsx
-#: src/components/routes/settings/notifications.tsx
 #: src/components/routes/settings/layout.tsx
+#: src/components/routes/settings/notifications.tsx
 msgid "Notifications"
 msgstr "Notifiche"
 
@@ -672,9 +672,9 @@ msgstr "Supporto OAuth 2 / OIDC"
 msgid "On each restart, systems in the database will be updated to match the systems defined in the file."
 msgstr "Ad ogni riavvio, i sistemi nel database verranno aggiornati per corrispondere ai sistemi definiti nel file."
 
+#: src/components/routes/settings/tokens-fingerprints.tsx
+#: src/components/routes/settings/tokens-fingerprints.tsx
 #: src/components/systems-table/systems-table-columns.tsx
-#: src/components/routes/settings/tokens-fingerprints.tsx
-#: src/components/routes/settings/tokens-fingerprints.tsx
 msgid "Open menu"
 msgstr "Apri menu"
 
@@ -682,7 +682,7 @@ msgstr "Apri menu"
 msgid "Or continue with"
 msgstr "Oppure continua con"
 
-#: src/components/alerts/alert-button.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "Overwrite existing alerts"
 msgstr "Sovrascrivi avvisi esistenti"
 
@@ -729,12 +729,12 @@ msgstr "In pausa"
 msgid "Please <0>configure an SMTP server</0> to ensure alerts are delivered."
 msgstr "Si prega di <0>configurare un server SMTP</0> per garantire la consegna degli avvisi."
 
-#: src/components/alerts/alerts-system.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "Please check logs for more details."
 msgstr "Si prega di controllare i log per maggiori dettagli."
 
-#: src/components/login/forgot-pass-form.tsx
 #: src/components/login/auth-form.tsx
+#: src/components/login/forgot-pass-form.tsx
 msgid "Please check your credentials and try again"
 msgstr "Si prega di controllare le credenziali e riprovare"
 
@@ -812,8 +812,8 @@ msgstr ""
 msgid "Save address using enter key or comma. Leave blank to disable email notifications."
 msgstr "Salva l'indirizzo usando il tasto invio o la virgola. Lascia vuoto per disabilitare le notifiche email."
 
-#: src/components/routes/settings/notifications.tsx
 #: src/components/routes/settings/general.tsx
+#: src/components/routes/settings/notifications.tsx
 msgid "Save Settings"
 msgstr "Salva Impostazioni"
 
@@ -829,9 +829,14 @@ msgstr "Cerca"
 msgid "Search for systems or settings..."
 msgstr "Cerca sistemi o impostazioni..."
 
-#: src/components/alerts/alert-button.tsx
+#: src/components/alerts/alerts-sheet.tsx
 msgid "See <0>notification settings</0> to configure how you receive alerts."
 msgstr "Vedi <0>impostazioni di notifica</0> per configurare come ricevere gli avvisi."
+
+#. Generic sensors label in systems table
+#: src/components/systems-table/systems-table-columns.tsx
+msgid "Sensors"
+msgstr ""
 
 #: src/components/routes/system.tsx
 msgid "Sent"
@@ -886,11 +891,11 @@ msgid "Swap Usage"
 msgstr "Utilizzo Swap"
 
 #. System theme
-#: src/lib/utils.ts
-#: src/components/mode-toggle.tsx
 #: src/components/alerts-history-columns.tsx
-#: src/components/systems-table/systems-table-columns.tsx
+#: src/components/mode-toggle.tsx
 #: src/components/routes/settings/tokens-fingerprints.tsx
+#: src/components/systems-table/systems-table-columns.tsx
+#: src/lib/utils.ts
 msgid "System"
 msgstr "Sistema"
 
@@ -915,8 +920,8 @@ msgstr "Tabella"
 msgid "Temp"
 msgstr "Temperatura"
 
-#: src/lib/utils.ts
 #: src/components/routes/system.tsx
+#: src/lib/utils.ts
 msgid "Temperature"
 msgstr "Temperatura"
 
@@ -975,8 +980,8 @@ msgid "Token"
 msgstr "Token"
 
 #: src/components/command-palette.tsx
-#: src/components/routes/settings/tokens-fingerprints.tsx
 #: src/components/routes/settings/layout.tsx
+#: src/components/routes/settings/tokens-fingerprints.tsx
 msgid "Tokens & Fingerprints"
 msgstr "Token e Impronte Digitali"
 
@@ -1034,8 +1039,8 @@ msgid "Universal token"
 msgstr "Token universale"
 
 #. Context: System is up
-#: src/components/systems-table/systems-table-columns.tsx
 #: src/components/routes/system.tsx
+#: src/components/systems-table/systems-table-columns.tsx
 msgid "Up"
 msgstr "Attivo"
 
@@ -1058,13 +1063,13 @@ msgstr "Utilizzo"
 msgid "Usage of root partition"
 msgstr "Utilizzo della partizione root"
 
-#: src/components/charts/swap-chart.tsx
 #: src/components/charts/mem-chart.tsx
+#: src/components/charts/swap-chart.tsx
 msgid "Used"
 msgstr "Utilizzato"
 
-#: src/components/navbar.tsx
 #: src/components/command-palette.tsx
+#: src/components/navbar.tsx
 msgid "Users"
 msgstr "Utenti"
 

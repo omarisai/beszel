@@ -9,6 +9,7 @@ import {
 	$direction,
 	$maxValues,
 	$temperatureFilter,
+	$genericSensorFilter,
 } from "@/lib/stores"
 import { ChartData, ChartTimes, ContainerStatsRecord, GPUData, SystemRecord, SystemStatsRecord } from "@/types"
 import { ChartType, Unit, Os } from "@/lib/enums"
@@ -48,6 +49,7 @@ const MemChart = lazy(() => import("../charts/mem-chart"))
 const DiskChart = lazy(() => import("../charts/disk-chart"))
 const SwapChart = lazy(() => import("../charts/swap-chart"))
 const TemperatureChart = lazy(() => import("../charts/temperature-chart"))
+const GenericSensorChart = lazy(() => import("../charts/generic-sensor-chart"))
 const GpuPowerChart = lazy(() => import("../charts/gpu-power-chart"))
 const LoadAverageChart = lazy(() => import("../charts/load-average-chart"))
 
@@ -667,6 +669,32 @@ export default function SystemDetail({ name }: { name: string }) {
 							<TemperatureChart chartData={chartData} />
 						</ChartCard>
 					)}
+
+					{/* Generic sensor charts */}
+					{systemStats.at(-1)?.stats.gs && 
+						Object.entries(systemStats.at(-1)?.stats.gs ?? {}).map(([sensorName, sensorData]) => {
+							const sensor = sensorData as { v: number; u: string; min: number; max: number }
+							return (
+								<div key={sensorName} className="contents">
+									<ChartCard
+										empty={dataEmpty}
+										grid={grid}
+										title={`${sensorName} (${sensor.u})`}
+										description={`${sensorName} sensor readings`}
+										cornerEl={<FilterBar store={$genericSensorFilter} />}
+									>
+										<GenericSensorChart 
+											chartData={chartData}
+											sensorName={sensorName}
+											unit={sensor.u}
+											min={sensor.min}
+											max={sensor.max}
+										/>
+									</ChartCard>
+								</div>
+							)
+						})
+					}
 
 					{/* GPU power draw chart */}
 					{hasGpuPowerData && (

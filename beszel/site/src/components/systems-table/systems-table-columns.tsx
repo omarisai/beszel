@@ -1,7 +1,8 @@
-import { SystemRecord } from "@/types"
+import { SystemRecord, GenericSensorData } from "@/types"
 import { CellContext, ColumnDef, HeaderContext } from "@tanstack/react-table"
 import { ClassValue } from "clsx"
 import {
+	ActivityIcon,
 	ArrowUpDownIcon,
 	CopyIcon,
 	CpuIcon,
@@ -251,6 +252,38 @@ export default function SystemsTableColumns(viewMode: "table" | "grid"): ColumnD
 						{decimalString(value, value >= 100 ? 1 : 2)} {unit}
 					</span>
 				)
+			},
+		},
+		{
+			accessorFn: ({ info }) => info.gs,
+			id: "generic-sensors",
+			name: () => t({ message: "Sensors", comment: "Generic sensors label in systems table" }),
+			size: 80,
+			hideSort: true,
+			Icon: ActivityIcon,
+			header: sortableHeader,
+			cell(info) {
+				const sensors = info.getValue() as Record<string, GenericSensorData> | undefined
+				if (!sensors || Object.keys(sensors).length === 0) {
+					return null
+				}
+				
+				// Display the first sensor value as a summary, or count if multiple
+				const sensorEntries = Object.entries(sensors)
+				if (sensorEntries.length === 1) {
+					const [name, data] = sensorEntries[0]
+					return (
+						<span className={cn("tabular-nums whitespace-nowrap", viewMode === "table" && "ps-0.5")}>
+							{decimalString(data.v, 2)} {data.u}
+						</span>
+					)
+				} else {
+					return (
+						<span className={cn("tabular-nums whitespace-nowrap", viewMode === "table" && "ps-0.5")}>
+							{sensorEntries.length} sensors
+						</span>
+					)
+				}
 			},
 		},
 		{

@@ -132,6 +132,8 @@ export interface SystemStats {
 	bm?: [number, number]
 	/** temperatures */
 	t?: Record<string, number>
+	/** generic sensors */
+	gs?: Record<string, GenericSensorData>
 	/** extra filesystems */
 	efs?: Record<string, ExtraFsStats>
 	/** GPU data */
@@ -149,6 +151,17 @@ export interface GPUData {
 	u: number
 	/** power (w) */
 	p?: number
+}
+
+export interface GenericSensorData {
+	/** value */
+	v: number
+	/** unit */
+	u: string
+	/** minimum value */
+	min: number
+	/** maximum value */
+	max: number
 }
 
 export interface ExtraFsStats {
